@@ -1,0 +1,195 @@
+#!/bin/sh 
+#SBATCH -N 2                                                                                                            
+#SBATCH -A snic2014-8-18 
+#SBATCH -J ETOPO2                                                                                                     
+#SBATCH -t 120:00:00                                                                                                    
+#SBATCH --exclusive                                                                                                      
+#SBATCH -o energy.out                                                                                                   
+#SBATCH -e energy.err                                                                                                   
+#######                                                                                                                 
+#               
+
+. /etc/cmod/sh.init
+
+
+ulimit -s unlimited 
+
+
+module add openmpi/1.6.2-build1
+
+echo ; echo "OpenMPI: `which mpirun`"; echo
+#                                                                                                                                                                                                                                            
+echo ; env | grep SLURM ; echo
+
+#                                                                                                                                                           
+
+N0=${SLURM_NODELIST}; echo; echo "Requested nodes are:"
+
+
+
+
+s1=`echo ${N0} | cut -f1 -d']'`
+
+echo
+
+echo ${s2}
+
+
+s2=`echo ${s1} | cut -f2 -d'['`
+
+echo
+
+echo ${s2}
+
+
+nf=`echo ${s2} | awk -F',' '{ print NF }'`
+
+
+
+
+
+
+
+
+jd=0
+
+for nn in `seq ${nf}`;do
+
+    fl=`echo ${s2} | cut -d',' -f${nn}`
+
+    if [ -n ${fl} ]; then
+
+        echo ${fl}
+        
+        echo
+
+        sf=`echo ${fl} | grep -o '-'`
+        
+        echo ${sf}
+
+        if [ "${sf}" == "-" ]; then
+
+            echo "hyphen field " ${fl}
+
+
+            n1=`echo ${fl} | cut -d'-' -f1`
+            
+            n2=`echo ${fl} | cut -d'-' -f2`
+
+            echo "n1-n2"  "${n1}-${n2}"
+
+            if [ `expr ${n2} - ${n1}` -eq 1 ];then
+
+                no1=${n1}
+                 node[${jd}]=n${n1}
+                 jd=`expr ${jd} + 1`
+                 no2=${n2}
+                node[${jd}]=n${n2}
+                 jd=`expr ${jd} + 1`
+                 
+            else
+
+                n2n1=`expr ${n2} - ${n1} + 1`
+
+                for jn in `seq ${n2n1}`;do
+                     
+                    node[${jd}]=n`expr ${n1} + ${jn} - 1`
+                    jd=`expr ${jd} + 1`
+
+                done
+                echo 'node[*]' ${node[*]}
+            fi
+
+           else 
+
+             node[${jd}]=n${fl}
+             jd=`expr ${jd} + 1`
+             
+
+        fi
+
+        echo
+
+
+    fi
+
+done
+
+echo 'node[*]' ${node[*]}
+
+echo 'node[*]' ${!node[*]}
+
+
+jj=0                                                                                          
+                                                               
+while [ ${jj} -lt 70  ];do
+                                                                                                                                  
+jobp[${jj}]=" "
+                                                                                                                                             
+job[${jj}]=" " 
+                                                                                                                                             
+jj=`expr ${jj} + 1`
+                                                                                                                                       
+done
+                                                                                                                                                         
+iindex=`seq 1 7`
+                                                                                                                                   
+jindex=`seq 1 4`
+                                                                                                                                   
+HERE=`pwd`
+                                                                                                                                                 
+
+for jj in ${jindex};do 
+                                                                                                                                     
+    for ii in ${iindex};do
+                                                                                                                                  
+        c1=`printf "%02d" ${ii}`
+                                                                                                                          
+        c2=`printf "%02d" ${jj}`
+                                                                                                                          
+        job[${ii}${jj}]=""./tmx" "${c1}" "${c2}""
+                                                                                                        
+    done
+                                                                                                                                                     
+done       
+
+
+
+cd ${HERE}/
+
+echo ${job[*]}
+                                                                                                                                              
+
+#N0=${SLURM_NODELIST}; echo; echo "Requested nodes are:"
+
+mpirun\
+ -n 1 -hosts ${node[0]} ${job[11]} :\
+ -n 1 -hosts ${node[0]} ${job[21]} :\
+ -n 1 -hosts ${node[0]} ${job[31]} :\
+ -n 1 -hosts ${node[0]} ${job[41]} :\
+ -n 1 -hosts ${node[0]} ${job[51]} :\
+ -n 1 -hosts ${node[0]} ${job[61]} :\
+ -n 1 -hosts ${node[0]} ${job[71]} :\
+ -n 1 -hosts ${node[0]} ${job[12]} :\
+ -n 1 -hosts ${node[0]} ${job[22]} :\
+ -n 1 -hosts ${node[0]} ${job[32]} :\
+ -n 1 -hosts ${node[0]} ${job[42]} :\
+ -n 1 -hosts ${node[0]} ${job[52]} :\
+ -n 1 -hosts ${node[0]} ${job[62]} :\
+ -n 1 -hosts ${node[0]} ${job[72]} :\
+ -n 1 -hosts ${node[0]} ${job[13]} :\
+ -n 1 -hosts ${node[0]} ${job[23]} :\
+ -n 1 -hosts ${node[1]} ${job[33]} :\
+ -n 1 -hosts ${node[1]} ${job[43]} :\
+ -n 1 -hosts ${node[1]} ${job[53]} :\
+ -n 1 -hosts ${node[1]} ${job[63]} :\
+ -n 1 -hosts ${node[1]} ${job[73]} :\
+ -n 1 -hosts ${node[1]} ${job[14]} :\
+ -n 1 -hosts ${node[1]} ${job[24]} :\
+ -n 1 -hosts ${node[1]} ${job[34]} :\
+ -n 1 -hosts ${node[1]} ${job[44]} :\
+ -n 1 -hosts ${node[1]} ${job[54]} :\
+ -n 1 -hosts ${node[1]} ${job[64]} :\
+ -n 1 -hosts ${node[1]} ${job[74]}  
+#
+#

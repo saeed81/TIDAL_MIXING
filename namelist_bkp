@@ -1,0 +1,64 @@
+!=================================
+!  N A M E L I S T    tmx
+!=================================
+!
+&namgrn
+!
+nn_gr   = 2
+cn_dir  = '../'
+rn_beta = 1.455
+/ 
+
+&namtide
+!
+cn_dir = '../'
+cn_cu = 'm2'
+/
+
+&nammpp
+!
+nn_isplt = 1
+nn_jsplt = 1
+/
+!
+&namhydro
+!
+cn_dir = '../' 
+/
+!
+&namsol 
+ln_modal    = .false. 
+ln_energy   = .true.
+ln_velocity = .false.
+nn_bfz      = 120
+rn_trunc    = 5.0
+nn_corr     = 2
+nn_mode     = 1
+/ 
+
+&namouteng
+!
+cn_dir     = '../'
+cn_varlon  = 'lon'
+cn_varlat  = 'lat' 
+cn_vartime = 'time'
+cn_varout  = 'energy' 
+cn_unit    = 'W/m2'
+cn_ln      = 'computed internal tide energy flux for m2 component on staggered grid' 
+ln_cutoff  = .false.
+ln_steep   = .false.
+ln_hslope  = .false.
+ln_bt       = .false.
+/
+!
+&namoutvel
+!
+cn_dir     = './'
+cn_varlon  = 'lon'
+cn_varlat  = 'lat'
+cn_vartime = 'time'
+cn_varout  = 'velocity'
+cn_unit    = 'm/s'
+cn_ln      = 'computed velocity on topographic points for m2'
+ln_bt       = .true.
+/

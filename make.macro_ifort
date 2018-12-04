@@ -1,0 +1,35 @@
+#
+# Fortran compiler :
+#
+FC = ifort
+#
+#
+#NETCDF_PATH=/opt/netcdf_intel
+#
+# Fortran compilation flags :
+#
+# i-compilers/11.0.2008-12-16
+#
+NCDF=/afs/pdc.kth.se/home/b/brodeau/Public/opt/netcdf_intel11
+NCDF=/software/apps/netcdf/4.2/i1214-hdf5-1.8.9
+#
+#
+NCDF_LIB=$(NCDF)/lib
+NCDF_INC=$(NCDF)/include
+LIB_CDF = -L$(NCDF_LIB) -lnetcdf -lnetcdff
+#FF = -O3 -r8 -CB -traceback -module mod/ -I$(NETCDF_PATH)/include
+#FF= -O3 -CB -traceback -module mod/ -I$(NETCDF_PATH)/include
+#FF= -O3 -g -check all -warn all -CB -traceback -module mod/ -I$(NCDF_INC) 
+#FF= -O3 -debug all -check all -warn all -CB -traceback -module mod/ -I$(NCDF_INC) 
+FF= -O3  -CB -traceback -ip -extend_source -module mod/ -I$(NCDF_INC) 
+FF= -O3  -CB -traceback -extend_source -module mod/ -I$(NCDF_INC) 
+#FF= -O3 -extend_source -module mod/ -I$(NCDF_INC) 
+#FF= -O3 -module mod/ -I$(NCDF_INC) 
+#FF= -O3 -module mod/ -I$(NCDF_INC) 
+#FF= -g -syntax -debug all -check all -warn all -CB -traceback -module mod/ -I$(NCDF_INC) 
+#
+#-I$(NETCDF_PATH)/include
+#
+#
+#LIB_NET = -L$(NETCDF_PATH)/lib -lnetcdf
+#
